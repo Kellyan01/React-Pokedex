@@ -1,0 +1,73 @@
+#root {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: 1rem;
+  width: 100%;
+}
+
+h1 {
+  grid-column: 1 /span 12;
+  padding: 2rem;
+  background-color: red;
+  color: gold;
+  position: sticky;
+  top: 0;
+  margin: 0;
+  z-index: 1;
+}
+
+.pokemonList{
+  text-align: center;
+  grid-column: 1 /span 8;
+  margin-bottom: 4rem;
+  margin-top: 3rem;
+  article{
+    width: fit-content;
+    margin: 0 auto;
+  }
+  article:hover {
+    border: 5px solid gold;
+    cursor: pointer;
+  }
+}
+
+.profilPokemon{
+  grid-column: 9 /span 4;
+  position: sticky;
+  top: 10rem;
+  border: solid 7px red;
+  padding: 1rem;
+  margin-right: 4rem;
+  height: calc(100vh - 17rem);
+  overflow-y: scroll;
+  .avatar {
+    text-align: center;
+    h1 {
+      color: inherit;
+      background-color: transparent;
+      position: relative;
+    }
+  };
+  .type {
+    h2{
+      text-align: center;
+    };
+    div{
+      display: flex;
+      justify-content: space-around;
+      div {
+        flex-direction: column;
+        align-items: center;
+        font-size: 1.3rem;
+      }
+    };
+  };
+  .stats {
+    div{
+      display: flex;
+      justify-content: space-between;
+      width: 80%;
+      margin: 0 auto;
+    }
+  };
+}
