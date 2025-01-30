@@ -45,6 +45,7 @@ function ProfilPokemon({pokemon}){
 function App() {
   const [pokemonList, setPokemonList] = useState([])
   const [pokemon, setPokemon] = useState({})
+  const [page, setPage] = useState(0)
 
   useEffect(()=>{
     const abortControler = new AbortController()
@@ -53,9 +54,7 @@ function App() {
       signal : abortControler.signal
     })
     .then(response => response.json())
-    .then(json => {
-      setPokemonList(json)
-    })
+    .then(json => setPokemonList(json))
 
     return ()=>{
       abortControler.abort()
@@ -73,13 +72,22 @@ function App() {
     }
   },[pokemon])
 
-  console.log(pokemon)
+  console.log(pokemonList)
+
+  const POKEMON_LIST = []
+  for(let i = page; i < page + 1; i++){
+    <CardPokemon key={i} pokemon={pokemonList[i]} onClick={()=>{setPokemon(pokemonList[i])}}/>
+  }
+
+  console.log(POKEMON_LIST)
 
   return (
     <>
       <h1>POKEDEX</h1>
+      {page > 0 && <button onClick={()=>{setPage(page - 1)}}>Précédent</button>}{page < 10 &&<button onClick={()=>{setPage(page + 1)}}>Suivant</button>}
       <section className='pokemonList'>
-        {pokemonList.map((pokemon,index) => (<CardPokemon key={index} pokemon={pokemon} onClick={()=>{setPokemon(pokemon)}}/>))}
+        {/*pokemonList.map((pokemon,index) => (<CardPokemon key={index} pokemon={pokemon} onClick={()=>{setPokemon(pokemon)}}/>))*/}
+        {POKEMON_LIST}
       </section>
       {pokemon.name && <ProfilPokemon pokemon={pokemon}/>}
     </>
