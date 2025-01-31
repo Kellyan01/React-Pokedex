@@ -45,7 +45,7 @@ function ProfilPokemon({pokemon}){
 function PokemonList({page, pokemonList, onClick, limitPokemon, nbrPokemon}){
   const POKEMONS = []
   for(let i = page*nbrPokemon; i < (page +1)*nbrPokemon && i < limitPokemon; i++){
-      POKEMONS.push(<CardPokemon key={1} pokemon={pokemonList[i]} onClick={onClick} />)
+      POKEMONS.push(<CardPokemon key={i} pokemon={pokemonList[i]} onClick={onClick} />)
   }
   return (
     <section className='pokemonList'>
@@ -59,7 +59,8 @@ function App() {
   const [pokemon, setPokemon] = useState({})
   const [page, setPage] = useState(0)
   const [nbrPokemon, setNbrPokemon] = useState(10)
-  const LIMIT = 100
+  const LIMIT = 101
+  const LIMIT_PAGE = Math.ceil(LIMIT / nbrPokemon) - 1
 
   useEffect(()=>{
     const abortControler = new AbortController()
@@ -96,7 +97,7 @@ function App() {
     <>
       <h1>POKEDEX</h1>
 
-      {page > 0 && <button onClick={()=>{setPage(page - 1)}}>Précédent</button>}{page < 10 &&<button onClick={()=>{setPage(page + 1)}}>Suivant</button>}
+      {page > 0 && <button onClick={()=>{setPage(page - 1)}}>Précédent</button>}{page < LIMIT_PAGE &&<button onClick={()=>{setPage(page + 1)}}>Suivant</button>}
 
       {pokemonList.length > 0 && <PokemonList page={page} pokemonList={pokemonList} onClick={handleClick} limitPokemon={LIMIT} nbrPokemon={nbrPokemon}/>}
 
