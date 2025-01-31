@@ -3,7 +3,7 @@ import './App.css'
 
 function CardPokemon({pokemon, onClick}){
   return (
-    <article onClick={onClick}>
+    <article onClick={()=>onClick(pokemon)}>
       <img src={pokemon.image} alt={"portrait de "+pokemon.name} />
       <h2>{pokemon.name}</h2>
     </article>
@@ -42,15 +42,29 @@ function ProfilPokemon({pokemon}){
   )
 }
 
+function PokemonList({page, pokemonList, onClick, limitPokemon, nbrPokemon}){
+  const POKEMONS = []
+  for(let i = page*nbrPokemon; i < (page +1)*nbrPokemon && i < limitPokemon; i++){
+      POKEMONS.push(<CardPokemon key={1} pokemon={pokemonList[i]} onClick={onClick} />)
+  }
+  return (
+    <section className='pokemonList'>
+        {POKEMONS}
+    </section>
+  )
+}
+
 function App() {
   const [pokemonList, setPokemonList] = useState([])
   const [pokemon, setPokemon] = useState({})
   const [page, setPage] = useState(0)
+  const [nbrPokemon, setNbrPokemon] = useState(10)
+  const LIMIT = 100
 
   useEffect(()=>{
     const abortControler = new AbortController()
 
-    fetch('https://pokebuildapi.fr/api/v1/pokemon/limit/10',{
+    fetch('https://pokebuildapi.fr/api/v1/pokemon/limit/'+LIMIT,{
       signal : abortControler.signal
     })
     .then(response => response.json())
@@ -72,23 +86,20 @@ function App() {
     }
   },[pokemon])
 
-  console.log(pokemonList)
-
-  const POKEMON_LIST = []
-  for(let i = page; i < page + 1; i++){
-    <CardPokemon key={i} pokemon={pokemonList[i]} onClick={()=>{setPokemon(pokemonList[i])}}/>
+  function handleClick(pokemon){
+    console.log(pokemon)
+    setPokemon(pokemon)
   }
 
-  console.log(POKEMON_LIST)
 
   return (
     <>
       <h1>POKEDEX</h1>
+
       {page > 0 && <button onClick={()=>{setPage(page - 1)}}>Précédent</button>}{page < 10 &&<button onClick={()=>{setPage(page + 1)}}>Suivant</button>}
-      <section className='pokemonList'>
-        {/*pokemonList.map((pokemon,index) => (<CardPokemon key={index} pokemon={pokemon} onClick={()=>{setPokemon(pokemon)}}/>))*/}
-        {POKEMON_LIST}
-      </section>
+
+      {pokemonList.length > 0 && <PokemonList page={page} pokemonList={pokemonList} onClick={handleClick} limitPokemon={LIMIT} nbrPokemon={nbrPokemon}/>}
+
       {pokemon.name && <ProfilPokemon pokemon={pokemon}/>}
     </>
   )
